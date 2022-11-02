@@ -4,11 +4,42 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Doctor;
-use App\Models\Available_date;
+use App\Models\AvailableDate;
 use Illuminate\Support\Facades\File;
+use DateTime;
 
 class AppointmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->time_array=[
+            "09:00-09:30",
+            "09:30-10:00",
+            "10:00-10:30",
+            "10:30-11:00",
+            "11:00-11:30",
+            "11:30-12:00",
+            "12:00-12:30",
+            "12:30-01:00",
+            "01:00-01:30",
+            "01:30-02:00",
+            "02:00-02:30",
+            "02:30-03:00",
+            "03:00-03:30",
+            "03:30-04:00",
+            "04:00-04:30",
+            "04:30-05:00",
+            "05:00-05:30",
+            "05:30-06:00",
+            "06:00-06:30",
+            "06:30-07:00",
+            "07:00-07:30",
+            "07:30-08:00",
+            "08:00-08:30",
+            "08:30-09:00",
+            "09:00-09:30"
+        ];
+    }
     public function index()
     {
       //dd('dd');
@@ -177,51 +208,90 @@ class AppointmentController extends Controller
 
     public function doctors_shedule($doctor_id)
     {
-        if(!Available_date::where('doctor_id',$doctor_id)->exists())
-        {
-            $doctor=Doctor::where('id',$doctor_id)->first();
+            $available_dates=AvailableDate::where('doctor_id',$doctor_id)->orderBy('id','desc')->get();
+            $doctors=Doctor::orderBy('id','desc')->get();
+
             $obj=[
-                'doctor'=>$doctor
+                'available_dates'=>$available_dates,
+                'doctors'=>$doctors,
+                'time_array'=>$this->time_array
             ];
             return view('backend.appointment.doctors.shedule.create',$obj);
-        }
-        else
-        {
-            $available_date=Available_date::where('doctor_id',$doctor_id)->get();
-            return view('backend.appointment.doctors.shedule.edit');
-        }
+  
+
         
     }
 
-    public function doctors_shedule_add(Request $request,$doctor_id)
+    public function doctors_shedule_add(Request $request)
     {
-        //dd($doctor_id);
-        $days=[
-            'saturday',
-            'sunday',
-            'monday',
-            'tuesday',
-            'wednesday',
-            'thursday',
-            'friday'
-        ];
         date_default_timezone_set("Asia/Dhaka");
-        $date=date("Y-m-d h:i:sa");
-        foreach($days as $day)
-        {
-               //dd($day);
-                $data=[
-                    'doctor_id'=>$doctor_id,
-                    'day'=>$day,
-                    'time'=>$request->input($day),
-                    'created_at'=>$date,
-                    'updated_at'=>$date
-                ];
-                Available_date::create($data);
+        $current_date=date("Y-m-d h:i:sa");
+        $day = strtotime($request->input('day'));
+        $newformat = date('d-m-Y',$day);
+        //dd($newformat);
 
-        }
+        $data=[
+             'doctor_id'=>$request->input('doctor_id'),
+             'day'=>$newformat,
+             'time'=>$request->input('time'),
+             'created_at'=>$current_date,
+             'updated_at'=>$current_date
+        ];
 
-        return redirect(route('doctors'))->with('status',"Doctor's Shedule Submitted Successfully");
+        //dd($data);
+        AvailableDate::create($data);
 
+ 
+
+        return redirect(route('doctors'))->with('status',"Doctor's Shedule Added Successfully");
+
+    }
+
+
+    public function doctors_shedule_edit($available_date_id)
+    {
+        $available_date=AvailableDate::where('id',$available_date_id)->first();
+        $obj=[
+            'available_date'=>$available_date,
+            'time_array'=>$this->time_array
+        ];
+        return view('backend.appointment.doctors.shedule.edit',$obj);
+    }
+
+
+
+
+    public function doctors_shedule_update(Request $request,$available_date_id)
+    {
+        date_default_timezone_set("Asia/Dhaka");
+        $current_date=date("Y-m-d h:i:sa");
+
+        $day = strtotime($request->input('day'));
+        $data=[
+             //'day'=>$newformat,
+             'time'=>$request->input('time'),
+             'is_active'=>$request->input('is_active'),
+             'updated_at'=>$current_date
+        ];
+
+        //dd($data);
+        $avl=AvailableDate::where('id',$available_date_id)->update($data);
+        $doctor_id=AvailableDate::where('id',$available_date_id)->first()->doctor_id;
+        return redirect('/admin/doctors/shedule/'.$doctor_id)->with('status',"Doctor's Shedule Updated Successfully");
+    }
+
+
+
+
+
+
+    public function doctors_shedule_delete($available_date_id)
+    {
+            $doctor_id=AvailableDate::where('id',$available_date_id)->first()->doctor_id;
+
+            $available_date=AvailableDate::find($available_date_id);
+            $available_date->delete();
+            
+            return redirect('/admin/doctors/shedule/'.$doctor_id)->with('status',"Doctor's Shedule Deleted Successfully");
     }
 }

@@ -43,6 +43,8 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
         //Delivery Boy Order
         Route::get('purchase-history-details/{id}', 'App\Http\Controllers\Api\V2\DeliveryBoyController@details')->middleware('auth:sanctum');
         Route::get('purchase-history-items/{id}', 'App\Http\Controllers\Api\V2\DeliveryBoyController@items')->middleware('auth:sanctum');
+
+
     });
 
     Route::prefix('seller')->group(function () {
@@ -266,10 +268,12 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
     Route::apiResource('blog-categories', 'App\Http\Controllers\Api\V2\BlogCategoryController')->only('index', 'show');
     Route::get('blogs', 'App\Http\Controllers\Api\V2\BlogController@index');
     Route::get('blog/{slug}', 'App\Http\Controllers\Api\V2\BlogController@getBlog');
-
     
-    Route::apiResource('doctors', 'App\Http\Controllers\Api\V2\DoctorController')->only('index', 'show');
-    // Route::get('doctor-schedule/doctor_id', 'App\Http\Controllers\Api\V2\DoctorController@doctorSchedule');
+    //appointment
+    Route::get('doctors', 'App\Http\Controllers\Api\V2\DoctorController@index');
+    Route::get('doctor-schedule/{doctor_id}', 'App\Http\Controllers\Api\V2\DoctorController@doctorSchedule');
+    Route::post('doctor-appointments', 'App\Http\Controllers\Api\V2\DoctorAppointmentController@store');
+    
     Route::apiResource('youtube-categories', 'App\Http\Controllers\Api\V2\KireiYoutubeCategoryController')->only('index');
     Route::get('youtube-videos', 'App\Http\Controllers\Api\V2\KireiYoutubeController@index');
     Route::get('youtube-feature/videos', 'App\Http\Controllers\Api\V2\KireiYoutubeController@feature');
@@ -296,7 +300,6 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
     Route::post('community-comment-create', 'App\Http\Controllers\Api\V2\CommunityCommentController@store')->middleware('auth:sanctum');
     Route::post('community-like-create', 'App\Http\Controllers\Api\V2\CommunityLikeController@store')->middleware('auth:sanctum');
 
-    Route::post('doctor-appointments', 'App\Http\Controllers\Api\V2\DoctorAppointmentController@store');
     Route::post('profile/update-info', 'App\Http\Controllers\Api\V2\ProfileController@updateInfo')->middleware('auth:sanctum');
     Route::get('order-details/{id}', 'App\Http\Controllers\Api\V2\PurchaseHistoryController@orderDetails');
 

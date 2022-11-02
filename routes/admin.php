@@ -170,7 +170,10 @@ Route::controller(AppointmentController::class)->group(function () {
 
     //shedule
     Route::get('/doctors/shedule/{doctor_id}', 'doctors_shedule')->name('doctors.shedule');
-    Route::post('/doctors/shedule/add/{doctor_id}', 'doctors_shedule_add')->name('doctors.shedule.add');
+    Route::post('/doctors/shedule/add', 'doctors_shedule_add')->name('doctors.shedule.add');
+    Route::get('/doctors/shedule/edit/{available_date_id}', 'doctors_shedule_edit')->name('doctors.shedule.edit');
+    Route::post('/doctors/shedule/update/{available_date_id}', 'doctors_shedule_update')->name('doctors.shedule.update');
+    Route::get('/doctors/shedule/delete/{available_date_id}', 'doctors_shedule_delete')->name('doctors.shedule.delete');
 
 });
     // Customer

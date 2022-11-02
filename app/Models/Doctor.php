@@ -13,7 +13,7 @@
                 }
                 public function available_date()
                 {
-                    return $this->hasMany(Available_date::class);
+                    return $this->hasMany(AvailableDate::class);
                  }
             }
 

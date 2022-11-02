@@ -7,6 +7,8 @@ use App\Http\Resources\V2\BlogCollection;
 use App\Http\Resources\V2\DoctorCollection;
 use App\Models\Blog;
 use App\Models\Doctor;
+use App\Models\AvailableDate;
+use App\Models\doctorSchedule;
 use Illuminate\Http\Request;
 use Cache;
 
@@ -22,6 +24,16 @@ class DoctorController extends Controller
         return Cache::remember('app.doctors', 86400, function () {
             return new DoctorCollection(Doctor::where('is_active', 1)->get());
         });
+    }
+
+    public function doctorSchedule($doctor_id)
+    {
+        $available_date=AvailableDate::where('doctor_id',$doctor_id)->where('is_active',1)->get()->groupBy('day');
+        
+        return response()->json([
+            'result' => true,
+            'data' => $available_date
+        ]);
     }
 
     /**

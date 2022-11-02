@@ -32,9 +32,9 @@
                                 @endif
                             </td>
                             <td>
-                                  <a href="{{url('/admin/doctors/edit/'.$doctor['id'])}}" class="btn btn-secondary">Edit</a>
-                                  <a href="{{url('/admin/doctors/shedule/'.$doctor['id'])}}" class="btn btn-primary">Shedule</a>
-                                  <a href="{{url('/admin/doctors/delete/'.$doctor['id'])}}" class="btn btn-danger" onclick="return confirm('Click Ok to Delete')">Delete</a>
+                                  <a href="{{url('/admin/doctors/edit/'.$doctor['id'])}}" class="btn-sm btn-secondary">Edit</a>
+                                  <a href="{{url('/admin/doctors/shedule/'.$doctor['id'])}}" class="btn-sm btn-primary">Shedule</a>
+                                  <a href="{{url('/admin/doctors/delete/'.$doctor['id'])}}" class="btn-sm btn-danger" onclick="return confirm('Click Ok to Delete')">Delete</a>
                             </td>
                         </tr>
                 @endforeach

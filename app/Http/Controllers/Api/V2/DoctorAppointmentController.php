@@ -47,8 +47,7 @@ class DoctorAppointmentController extends Controller
         $row->name = $request->name;
         $row->email = $request->email;
         $row->phone = $request->phone;
-        $row->date = $request->date;
-        $row->date = $request->time;
+        $row->available_date_id = $request->available_date_id;
         $row->message = $request->message;
         $row->is_active = 0;
         $row->save();

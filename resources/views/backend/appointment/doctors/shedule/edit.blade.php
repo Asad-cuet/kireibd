@@ -8,58 +8,69 @@
       </div>
       
       <div class="card-body">
-      <form action="{{url('/admin/doctors/shedule/add/'.$doctor->id)}}" method="POST" enctype="multipart/form-data">
+      <form action="{{url('/admin/doctors/shedule/update/'.$available_date->id)}}" method="POST">
             @csrf
 
             <div class="form-group row">
-                <label class="col-md-3 col-from-label">Saturday</label>
+                <label class="col-md-3 col-from-label">Doctor (D)</label>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" name="saturday" placeholder="Write Time Range">
+                    <select name="doctor_id">
+  
+                           <option value="{{$available_date->doctor['id']}}">{{$available_date->doctor['name']}}</option>
+
+                    </select>    
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-md-3 col-from-label">Sunday</label>
+                <label class="col-md-3 col-from-label">Date</label>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" name="sunday" placeholder="Write Time Range">
+                    <input type="text" class="form-control" name="day" placeholder="dd-mm-yyyy">
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-md-3 col-from-label">Monday</label>
+                <label class="col-md-3 col-from-label">Time</label>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" name="monday" placeholder="Write Time Range">
+                    <select name="time">
+                        @foreach($time_array as $time)
+                        <option value="{{$time}}" @if($time==$available_date['time']) selected @endif>{{$time}}</option>
+                        @endforeach
+                    </select> 
                 </div>
             </div>
+
             <div class="form-group row">
-                <label class="col-md-3 col-from-label">Tuesday</label>
+                <label class="col-md-3 col-from-label">Status</label>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" name="tuesday" placeholder="Write Time Range">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-md-3 col-from-label">Wednesday</label>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" name="wednesday" placeholder="Write Time Range">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-md-3 col-from-label">Thursday</label>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" name="thursday" placeholder="Write Time Range">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-md-3 col-from-label">Friday</label>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" name="friday" placeholder="Write Time Range">
+
+                      <div class="form-check-inline">
+                            <input class="form-check-input" name="is_active" type="radio" id="flexRadioDefault1" @if($available_date->is_active==1) checked @endif>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Active
+                            </label>
+                      </div>
+                      <div class="form-check-inline">
+                            <input class="form-check-input" name="is_active" type="radio" id="flexRadioDefault2" @if($available_date->is_active==0) checked @endif>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                              Inactive
+                            </label>
+                      </div>
+
+
                 </div>
             </div>
 
             <div style="text-align:center">
-            <button type="submit" name="button" class="btn btn-primary action-btn">Save</button>
+            <button type="submit" name="button" class="btn btn-primary action-btn">Update</button>
             </div>
 
       </form>
-      </div>      
+
+
+
+      
+
+
+    </div>      
 
 
 
